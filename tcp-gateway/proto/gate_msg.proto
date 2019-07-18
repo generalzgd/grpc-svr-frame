@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message StreamGateMessage {
+    bytes body = 1;
+    string server_name = 2; // 对应的服务名
+    string method_name = 3; // 对应的方法
+    oneof kind {
+        string json = 4;
+        string protobuf = 5;
+    }
+}
+
+

@@ -1,0 +1,82 @@
+syntax = "proto3";
+package clusterpro;
+
+message ClusterDetect {
+    string FromIp = 1;
+}
+
+// 集群中某台节点发起投票请求
+message ClusterVoteRequest {
+// 发起投票请求的节点
+    string FromIp = 1;
+    string TarIp = 2;
+// 逻辑钟
+    int32 Clock = 3;
+}
+
+// 投票请求响应
+message ClusterVoteResponse {
+    int32 Clock = 1;
+//    投给谁
+    string VoteIp = 2;
+//    投票人的IP
+    string FromIp = 3;
+//    投票响应状态，true:支持，false:拒绝投票，拒绝一般是leader发起，即fromip为leader IP
+    bool State = 4;
+}
+
+enum ClusterNodeState {
+    LOOKING = 0;
+    LEADING = 1;
+    FALLOWING = 2;
+}
+
+// 集群心跳
+message ClusterHeart {
+}
+
+// 集群心跳响应
+message ClusterHeartAck {
+}
+
+// 集群对点检测
+message ClusterPing {
+}
+
+message ClusterPingAck {
+}
+
+message ClusterJoinRequest {
+//    需要加入集群点IP
+    string Ip = 1;
+}
+
+message ClusterJoinResponse {
+    string Ip = 1;
+//    位于集群中的第几个
+    int32 Idx = 2;
+//    集群共有几个节点
+    int32 Cnt = 3;
+//    当前节点的状态, LOOKING LEADING FALLOWING
+    ClusterNodeState State = 4;
+}
+
+message ClusterCollectRequest {
+    string FromIp = 1;
+}
+
+message ClusterCollectResponse {
+    string FromIp = 1;
+    string Ip = 2;
+}
+
+message ClusterNotify {
+    repeated SvrInfo list = 1;
+}
+
+message SvrInfo {
+    string Ip = 1;
+    int32 Idx = 2;
+    int32 Cnt = 3;
+    ClusterNodeState State = 4;
+}

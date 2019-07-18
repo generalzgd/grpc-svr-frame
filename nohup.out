@@ -1,0 +1,5 @@
+2019/05/20 17:43:42.725 [1;34m[I]  start grace svr [0m
+2019/05/20 17:43:42.725 [1;34m[I]  start serving pid [::]:10011 8094 [0m
+2019/05/20 17:44:30.180 [1;34m[I]  start grace svr [0m
+2019/05/20 17:44:30.180 [1;34m[I]  graceful hand off with new pid replace old [::]:10011 8127 8094 [0m
+2019/05/20 17:44:47.589 [1;34m[I]  exiting pid 8094 [0m

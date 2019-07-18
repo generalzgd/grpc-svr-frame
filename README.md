@@ -1,2 +1,1 @@
-# grpc-svr-frame
-grpc communicate frame
+# grpc-frame
