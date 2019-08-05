@@ -13,6 +13,9 @@ package tcp_gateway
 
 import (
 	"bufio"
+	"bytes"
+	"encoding/binary"
+	"io"
 	"net"
 	"time"
 
@@ -27,30 +30,65 @@ type IGateConn interface {
 	GetRealIp() string
 }
 
-type TcpGateCodec struct {
+type GateCodecBase struct {
 	*GateProtocol
 	id      uint32
 	conn    net.Conn
 	reader  *bufio.Reader
 	headBuf []byte
 	headDat [TCP_GATE_PACKAGE_HEAD_LENGTH]byte
+}
+
+func (p *GateCodecBase) Receive() (interface{}, error) {
+	//panic("implement me")
+	p.MemSet(p.headBuf, 0)
+	if _, err := io.ReadFull(p.reader, p.headBuf);err != nil {
+		return nil, err
+	}
+
+	length := int(binary.LittleEndian.Uint32(p.headBuf[0:]))
+	if length > p.MaxPacketSize {
+		return nil, bytes.ErrTooLarge
+	}
+
+	buffer := p.Alloc(TCP_GATE_PACKAGE_HEAD_LENGTH + length)
+	copy(buffer, p.headBuf)
+	if _, err := io.ReadFull(p.reader, buffer[TCP_GATE_PACKAGE_HEAD_LENGTH:]); err != nil {
+		p.Free(buffer)
+		return nil, err
+	}
+	return &buffer, nil
+}
+
+type TcpGateCodec struct {
+
+	GateCodecBase
 	realIp  string
 }
 
-func (p *TcpGateCodec) ClearSendChan(<-chan interface{}) {
-	panic("implement me")
+func (p *TcpGateCodec) ClearSendChan(sendChan <-chan interface{}) {
+	//panic("implement me")
+	for msg := range sendChan {
+		p.Free(*(msg.(*[]byte)))
+	}
 }
 
 func (p *TcpGateCodec) Receive() (interface{}, error) {
-	panic("implement me")
+	//panic("implement me")
+	return p.GateCodecBase.Receive()
 }
 
-func (p *TcpGateCodec) Send(interface{}) error {
-	panic("implement me")
+func (p *TcpGateCodec) Send(msg interface{}) error {
+	//panic("implement me")
+	buffer := *(msg.(*[]byte))
+	_, err := p.conn.Write(buffer)
+	p.Free(buffer)
+	return err
 }
 
 func (p *TcpGateCodec) Close() error {
-	panic("implement me")
+	//panic("implement me")
+	return p.conn.Close()
 }
 
 func (p *TcpGateCodec) SocketID() uint32 {
@@ -75,29 +113,33 @@ func (p *TcpGateCodec) GetRealIp() string {
 
 // //////////////////////////
 type TlsGateCodec struct {
-	*GateProtocol
-	id      uint32
-	conn    net.Conn
-	reader  *bufio.Reader
-	headBuf []byte
-	headDat [TCP_GATE_PACKAGE_HEAD_LENGTH]byte
+	GateCodecBase
 	realIp  string
 }
 
-func (TlsGateCodec) ClearSendChan(<-chan interface{}) {
-	panic("implement me")
+func (p *TlsGateCodec) ClearSendChan(sendChan <-chan interface{}) {
+	//panic("implement me")
+	for msg := range sendChan {
+		p.Free(*(msg.(*[]byte)))
+	}
 }
 
-func (TlsGateCodec) Receive() (interface{}, error) {
-	panic("implement me")
+func (p *TlsGateCodec) Receive() (interface{}, error) {
+	//panic("implement me")
+	return p.GateCodecBase.Receive()
 }
 
-func (TlsGateCodec) Send(interface{}) error {
-	panic("implement me")
+func (p *TlsGateCodec) Send(msg interface{}) error {
+	//panic("implement me")
+	buffer := *(msg.(*[]byte))
+	_, err := p.conn.Write(buffer)
+	p.Free(buffer)
+	return err
 }
 
-func (TlsGateCodec) Close() error {
-	panic("implement me")
+func (p *TlsGateCodec) Close() error {
+	//panic("implement me")
+	return p.conn.Close()
 }
 
 func (p *TlsGateCodec) SocketID() uint32 {
@@ -130,39 +172,73 @@ type WsGateCodec struct {
 	realIp  string
 }
 
-func ( WsGateCodec) SocketID() uint32 {
-	panic("implement me")
+func (p *WsGateCodec) SocketID() uint32 {
+	//panic("implement me")
+	return p.id
 }
 
-func ( WsGateCodec) ClientAddr() string {
-	panic("implement me")
+func (p * WsGateCodec) ClientAddr() string {
+	//panic("implement me")
+	return p.conn.RemoteAddr().String()
 }
 
-func ( WsGateCodec) SetReadDeadline(t time.Time) error {
-	panic("implement me")
+func (p * WsGateCodec) SetReadDeadline(t time.Time) error {
+	//panic("implement me")
+	return p.conn.SetReadDeadline(t)
 }
 
-func ( WsGateCodec) SetRealIp(v string) {
-	panic("implement me")
+func (p * WsGateCodec) SetRealIp(v string) {
+	//panic("implement me")
+	p.realIp = v
 }
 
-func ( WsGateCodec) GetRealIp() string {
-	panic("implement me")
+func (p * WsGateCodec) GetRealIp() string {
+	//panic("implement me")
+	return p.realIp
 }
 
-func ( WsGateCodec) ClearSendChan(<-chan interface{}) {
-	panic("implement me")
+func (p * WsGateCodec) ClearSendChan(sendChan <-chan interface{}) {
+	//panic("implement me")
+	for msg := range sendChan {
+		p.Free(*(msg.(*[]byte)))
+	}
 }
 
-func ( WsGateCodec) Receive() (interface{}, error) {
-	panic("implement me")
+func (p * WsGateCodec) Receive() (interface{}, error) {
+	//panic("implement me")
+	_, r, err := p.conn.NextReader()
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := io.ReadFull(r, p.headBuf);err != nil {
+		return nil, err
+	}
+
+	length := int(binary.LittleEndian.Uint32(p.headBuf[0:]))
+	if length > p.MaxPacketSize {
+		return nil, bytes.ErrTooLarge
+	}
+
+	buffer := p.Alloc(TCP_GATE_PACKAGE_HEAD_LENGTH + length)
+	copy(buffer, p.headBuf)
+	if _, err := io.ReadFull(r, buffer[TCP_GATE_PACKAGE_HEAD_LENGTH:]); err != nil {
+		p.Free(buffer)
+		return nil, err
+	}
+	return &buffer, nil
 }
 
-func ( WsGateCodec) Send(interface{}) error {
-	panic("implement me")
+func (p * WsGateCodec) Send(msg interface{}) error {
+	//panic("implement me")
+	buffer := *(msg.(*[]byte))
+	err := p.conn.WriteMessage(2, buffer)
+	p.Free(buffer)
+	return err
 }
 
-func ( WsGateCodec) Close() error {
-	panic("implement me")
+func (p * WsGateCodec) Close() error {
+	//panic("implement me")
+	return p.conn.Close()
 }
 

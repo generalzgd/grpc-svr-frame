@@ -1,0 +1,44 @@
+#
+name: grpc-gateway
+ver: 1.0.0
+
+nodewarn:
+    threshold: 250.0
+    method: email # sms
+
+list:
+-   type: tcp # 0:http 1:tcp 2:ws
+    gwconf:
+        insecure: true
+        certfiles:
+        -   cert: cert.pem
+            priv: priv.key
+        buffersize: 16384
+        maxconn: 5000
+        idletimeout: 15s
+        sendchansize: 1024
+        recvchansize: 1024
+        port: 8080
+    endpointconf:
+        insecure: true
+        certfiles:
+        -   cert: cert.pem
+            priv: priv.key
+        endpoint: 127.0.0.1:9090
+    policyconf:
+        type: random
+        percent:
+        -   endpoint:
+            percent: 0.25
+    sticonf:
+        type: tps
+        field: aaa
+    warnconf:
+        endpointwarn:
+        -   endpoint: 127.0.0.1:1234
+            threshold: 2345
+            method: email
+        svrwarn:
+        -   endpoint: 127.0.0.1:4321
+            threshold: 2345
+            method: email

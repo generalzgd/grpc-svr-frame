@@ -17,10 +17,12 @@ import (
 	"github.com/funny/slab"
 )
 
+// GatePacket --> StreamGateMessage --> StreamMessage
 type GatePacket struct {
 	Length uint32
 	Ver    uint16
 	Opt    uint16
+	CmdId  uint32
 	Body   []byte
 }
 
@@ -95,9 +97,6 @@ func (p *GatePackEncrypt) DecodePacket(data []byte) interface{} {
 
 	return pack
 }
-
-
-
 
 type GateProtocol struct {
 	GatePackEncrypt

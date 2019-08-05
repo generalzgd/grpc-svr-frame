@@ -5,12 +5,13 @@
  * @contact: general_zgd@163.com
  * @site: github.com/generalzgd
  * @software: GoLand
- * @file: tcp_gate_config.go
- * @time: 2019-07-17 23:08
+ * @file: svrmgr.go
+ * @time: 2019-07-18 12:36
  */
 
-package tcp_gateway
+package grpclb
 
-const (
+// grpc服务管理
+type GrpcSvrMgr struct {
 
-)
+}

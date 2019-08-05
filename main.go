@@ -20,8 +20,8 @@ import (
 	"google.golang.org/grpc/examples/helloworld/helloworld"
 	"google.golang.org/grpc/reflection"
 
-	"generalzgd/grpc-svr-frame/grpcgrace"
-	"generalzgd/grpc-svr-frame/proto"
+	"github.com/generalzgd/grpc-svr-frame/grpcgrace"
+	"github.com/generalzgd/grpc-svr-frame/proto"
 
 	//"github.com/bsm/grpclb"
 )
@@ -29,7 +29,7 @@ import (
 type Svr struct {
 }
 
-func (p *Svr) SayHello(context.Context, *proto.HelloReq) (*proto.HelloResp, error) {
+func (p *Svr) SayHello(ctx context.Context, req *proto.HelloReq) (*proto.HelloResp, error) {
 	//panic("implement me")
 	return &proto.HelloResp{}, nil
 }
@@ -52,7 +52,7 @@ func exampleNewResolver() {
 		return
 	}
 	defer func() {
-		_ = conn.Close()
+		conn.Close()
 	}()
 
 	c := helloworld.NewGreeterClient(conn)

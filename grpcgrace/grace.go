@@ -13,13 +13,14 @@ package grpcgrace
 
 import (
 	"errors"
-	"github.com/astaxie/beego"
-	"github.com/facebookgo/grace/gracenet"
-	"google.golang.org/grpc"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/astaxie/beego"
+	"github.com/facebookgo/grace/gracenet"
+	"google.golang.org/grpc"
 )
 
 var (
@@ -36,9 +37,9 @@ type GraceGrpc struct {
 
 func New(s *grpc.Server, netType, addr string) (*GraceGrpc, error) {
 	g := GraceGrpc{
-		server:  s,
-		grace:   &gracenet.Net{},
-		errors:  make(chan error),
+		server: s,
+		grace:  &gracenet.Net{},
+		errors: make(chan error),
 	}
 
 	lis, err := g.grace.Listen(netType, addr)

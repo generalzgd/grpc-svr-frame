@@ -1,13 +1,33 @@
 syntax = "proto3";
 
-message StreamGateMessage {
-    bytes body = 1;
-    string server_name = 2; // 对应的服务名
-    string method_name = 3; // 对应的方法
-    oneof kind {
-        string json = 4;
-        string protobuf = 5;
-    }
+enum GatewayMsgKind {
+    Json = 0;
+    ProtoBuf = 1;
 }
 
+enum GatewayMsgPhase {
+    Handshake = 0;
+    Communcate = 1;
+}
+
+// 网关握手协议消息
+message GatewayMsg {
+    string server_name = 1; // 对应的服务名
+    GatewayMsgKind kind = 2;
+    GatewayMsgPhase phase = 3;
+    uint32 code = 4;
+    string message = 5;
+    bytes body = 6;
+}
+
+// 长连接 通讯消息
+message StreamMessage {
+    string method_name = 1; // 对应的方法
+    bytes body = 2;
+}
+
+// 通用的长链接 服务
+service CommonStreamSvr {
+    rpc Communicate(stream StreamMessage) returns (stream StreamMessage) {}
+}
 
