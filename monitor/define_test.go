@@ -5,15 +5,15 @@
  * @contact: general_zgd@163.com
  * @site: github.com/generalzgd
  * @software: GoLand
- * @file: policy.go
- * @time: 2019-07-18 14:01
+ * @file: define.go
+ * @time: 2019-07-30 15:42
  */
 
-package grpclb
+package monitor
 
 import "testing"
 
-func TestValidatePolicyType(t *testing.T) {
+func TestValidateStatisticType(t *testing.T) {
 	type args struct {
 		in string
 	}
@@ -24,15 +24,15 @@ func TestValidatePolicyType(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			name:"TestValidatePolicyType",
-			args:args{POLICY_LOW_FIRST},
+			name:"TestValidateStatisticType",
+			args:args{STS_CNT},
 			want:true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ValidatePolicyType(tt.args.in); got != tt.want {
-				t.Errorf("ValidatePolicyStr() = %v, want %v", got, tt.want)
+			if got := ValidateStatisticType(tt.args.in); got != tt.want {
+				t.Errorf("ValidateStatisticType() = %v, want %v", got, tt.want)
 			}
 		})
 	}

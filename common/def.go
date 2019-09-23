@@ -13,6 +13,7 @@ package common
 
 import (
 	"strings"
+	`time`
 
 	"github.com/toolkits/slice"
 )
@@ -56,4 +57,31 @@ func ValidateLbPolicyType(in string) bool {
 func ValidateStasticsType(in string) bool {
 	in = strings.ToLower(in)
 	return slice.ContainsString(StiTypeList, in)
+}
+
+
+// 客户端连接的用户信息
+type ClientConnInfo struct {
+	SocketId  uint32 `json:"socket_id,omitempty"`
+	ClientIp  string `json:"client_ip,omitempty"`
+	GateIp    string `json:"gate_ip,omitempty"`
+	Uid       uint32 `json:"uid,omitempty"`
+	Cid       string `json:"cid,omitempty"`
+	Platform  uint32 `json:"platform,omitempty"`
+	Nickname  string `json:"nickname,omitempty"`
+	PLevel    uint32 `json:"plevel,omitempty"`
+	State     bool   `json:"state,omitempty"`
+	Guid      string `json:"guid,omitempty"`
+	LoginTime int64  `json:"login_time,omitempty"` // 上次登录时间
+	Expire    int64  `json:"-"`                    // 过期时间 s，logintime + expire < now, expire==0 不过期
+}
+
+// 是否过期
+func (p *ClientConnInfo) Expired() bool {
+	if p.Expire > 0 {
+		if p.LoginTime+p.Expire < time.Now().Unix() {
+			return true
+		}
+	}
+	return false
 }

@@ -9,7 +9,7 @@
  * @time: 2019-05-20 11:28
  */
 
-package grpcgrace
+package grpc_grace
 
 import (
 	"errors"

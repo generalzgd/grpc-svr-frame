@@ -14,29 +14,29 @@ package main
 import (
 	"context"
 
-	"github.com/astaxie/beego"
+	`github.com/astaxie/beego/logs`
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/balancer/roundrobin"
 	"google.golang.org/grpc/examples/helloworld/helloworld"
 	"google.golang.org/grpc/reflection"
 
-	"github.com/generalzgd/grpc-svr-frame/grpcgrace"
+	grpc_grace `github.com/generalzgd/grpc-svr-frame/grpc-grace`
 	"github.com/generalzgd/grpc-svr-frame/proto"
 
-	//"github.com/bsm/grpclb"
+	// "github.com/bsm/grpclb"
 )
 
 type Svr struct {
 }
 
 func (p *Svr) SayHello(ctx context.Context, req *proto.HelloReq) (*proto.HelloResp, error) {
-	//panic("implement me")
+	// panic("implement me")
 	return &proto.HelloResp{}, nil
 }
 
 // use "kill -31 pid" to restart svr graceful
 func main() {
-	//exampleGrpc()
+	// exampleGrpc()
 
 	exampleNewResolver()
 }
@@ -44,11 +44,11 @@ func main() {
 func exampleNewResolver() {
 	const target = "helloworld"
 
-	//balance := grpc.RoundRobin(grpclb.NewResolver(&grpclb.Options{Address:"127.0.0.1:8383"}))
+	// balance := grpc.RoundRobin(grpclb.NewResolver(&grpclb.Options{Address:"127.0.0.1:8383"}))
 
 	conn, err := grpc.Dial(target, grpc.WithInsecure(), grpc.WithBalancerName(roundrobin.Name))
 	if err != nil {
-		beego.Error("did not connect:", err)
+		logs.Error("did not connect:", err)
 		return
 	}
 	defer func() {
@@ -58,27 +58,27 @@ func exampleNewResolver() {
 	c := helloworld.NewGreeterClient(conn)
 	r, err := c.SayHello(context.Background(), &helloworld.HelloRequest{Name: "world"})
 	if err != nil {
-		beego.Error("could not greet:", err)
+		logs.Error("could not greet:", err)
 		return
 	}
 
-	beego.Info("Greeting:", r.Message)
+	logs.Info("Greeting:", r.Message)
 }
 
 func exampleGrpc() {
-	beego.Info("start grace svr")
+	logs.Info("start grace svr")
 
 	addr := ":10011"
 	s := grpc.NewServer()
 	proto.RegisterDeployServer(s, &Svr{})
 	reflection.Register(s)
-	gr, err := grpcgrace.New(s, "tcp", addr)
+	gr, err := grpc_grace.New(s, "tcp", addr)
 	if err != nil {
-		beego.Error("failed to new grace grpc.", err)
+		logs.Error("failed to new grace grpc.", err)
 	}
 	if err := gr.Serve(); err != nil {
-		beego.Error("failed to serve:", addr)
+		logs.Error("failed to serve:", addr)
 	}
 
-	beego.BeeLogger.Flush()
+	logs.GetBeeLogger().Flush()
 }

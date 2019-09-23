@@ -9,7 +9,7 @@
  * @time: 2019-07-30 15:42
  */
 
-package statistics
+package monitor
 
 import "github.com/toolkits/slice"
 
