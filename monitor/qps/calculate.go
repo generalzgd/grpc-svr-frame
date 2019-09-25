@@ -14,7 +14,7 @@ import (
 	`fmt`
 	`time`
 
-	`github.com/generalzgd/grpc-svr-frame/statistic`
+	`github.com/generalzgd/grpc-svr-frame/monitor`
 )
 
 func init() {

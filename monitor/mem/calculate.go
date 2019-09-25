@@ -15,7 +15,7 @@ import (
 	`runtime`
 	`strings`
 
-	`github.com/generalzgd/grpc-svr-frame/statistic`
+	`github.com/generalzgd/grpc-svr-frame/monitor`
 )
 
 func init() {
