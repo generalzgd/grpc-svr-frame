@@ -25,13 +25,13 @@ func TestValidateStatisticType(t *testing.T) {
 		// TODO: Add test cases.
 		{
 			name:"TestValidateStatisticType",
-			args:args{STS_CNT},
+			args:args{ANALYSE_CNT},
 			want:true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ValidateStatisticType(tt.args.in); got != tt.want {
+			if got := ValidateAnalyseType(tt.args.in); got != tt.want {
 				t.Errorf("ValidateStatisticType() = %v, want %v", got, tt.want)
 			}
 		})

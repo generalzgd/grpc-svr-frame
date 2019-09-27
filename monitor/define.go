@@ -14,16 +14,16 @@ package monitor
 import "github.com/toolkits/slice"
 
 const (
-	STS_SUM = "sum"
-	STS_AVG = "avg"
-	STS_TPS = "tps"
-	STS_CNT = "count"
+	// 分析类型
+	ANALYSE_SUM = "sum"
+	ANALYSE_AVG = "avg"
+	ANALYSE_CNT = "count"
 )
 
 var (
-	StsList = []string{STS_SUM, STS_AVG, STS_TPS, STS_CNT}
+	StsList = []string{ANALYSE_SUM, ANALYSE_AVG, ANALYSE_CNT}
 )
 
-func ValidateStatisticType(in string) bool {
+func ValidateAnalyseType(in string) bool {
 	return slice.ContainsString(StsList, in)
 }

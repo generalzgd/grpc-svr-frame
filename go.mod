@@ -4,6 +4,7 @@ go 1.12
 
 require (
 	github.com/astaxie/beego v1.12.0
+	github.com/ddo/pick-json v0.0.0-20170207095303-c8760e09e0fe // indirect
 	github.com/facebookgo/ensure v0.0.0-20160127193407-b4ab57deab51 // indirect
 	github.com/facebookgo/freeport v0.0.0-20150612182905-d4adf43b75b9 // indirect
 	github.com/facebookgo/grace v0.0.0-20180706040059-75cf19382434
@@ -12,13 +13,14 @@ require (
 	github.com/funny/link v0.0.0-20190321084249-bd07e4e9e63f
 	github.com/funny/slab v0.0.0-20180511031532-b1fad5e5d478
 	github.com/funny/utest v0.0.0-20161029064919-43870a374500 // indirect
-	github.com/generalzgd/comm-libs v0.0.0-20190923062620-a884e5520268
+	github.com/generalzgd/comm-libs v0.0.0-20190926105101-faf86c3df881
 	github.com/generalzgd/deepcopy v0.0.0-20190822053003-05164161aa67
 	github.com/golang/protobuf v1.3.1
 	github.com/gorilla/websocket v1.4.0
 	github.com/hashicorp/consul/api v1.2.0
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/processout/grpc-go-pool v1.2.1
+	github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644 // indirect
 	github.com/toolkits/slice v0.0.0-20141116085117-e44a80af2484
 	google.golang.org/genproto v0.0.0-20190516172635-bb713bdc0e52 // indirect
 	google.golang.org/grpc v1.21.0

@@ -22,6 +22,7 @@ const (
 	Stat_Qps
 	Stat_Mem
 	Stat_Goroutine
+	Stat_Analyse
 )
 
 var (
@@ -42,6 +43,9 @@ var (
 )
 
 func Register(tar IMonitor) {
+	if tar == nil {
+		return
+	}
 	list = append(list, tar)
 }
 
