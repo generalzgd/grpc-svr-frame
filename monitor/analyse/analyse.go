@@ -22,7 +22,7 @@ import (
 	`github.com/generalzgd/grpc-svr-frame/monitor`
 )
 
-type ParseFunc func(interface{}, string) int
+type ParseFunc func(interface{}, string) (int, error)
 
 func NewAnalyse(threshold, analyseNum uint, analyseType, fieldName string, parseFunc ParseFunc) *Analyse {
 	if threshold < 1 || analyseNum < 1 || !monitor.ValidateAnalyseType(analyseType) || len(fieldName) < 1 {
@@ -34,7 +34,7 @@ func NewAnalyse(threshold, analyseNum uint, analyseType, fieldName string, parse
 		analyseNum:  int(analyseNum),
 		fieldName:   fieldName,
 		parseFunc:   parseFunc,
-		inFlow:      make(chan string, 1000),
+		inFlow:      make(chan interface{}, 1000),
 	}
 	go p.run()
 	return p
@@ -75,17 +75,21 @@ func (p *Analyse) run() {
 func (p *Analyse) analyseData(data interface{}) {
 	num := 0
 	if p.parseFunc != nil {
-		num = p.parseFunc(data, p.fieldName)
+		if v, err := p.parseFunc(data, p.fieldName); err == nil {
+			num = v
+		} else {
+			return
+		}
 	} else {
 		if str, ok := data.(string); ok {
 			res := pickjson.PickBytes([]byte(str), []byte(p.fieldName))
 			if res == nil {
 				return
 			}
-			if v, err := strconv.Atoi(string(res)); err != nil {
-				return
-			} else {
+			if v, err := strconv.Atoi(string(res)); err == nil {
 				num = v
+			} else {
+				return
 			}
 		} else {
 			return

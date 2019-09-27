@@ -15,6 +15,8 @@ import (
 	`time`
 
 	`github.com/astaxie/beego/logs`
+
+	`github.com/generalzgd/grpc-svr-frame/prewarn`
 )
 
 const (
@@ -53,6 +55,7 @@ func SetWarnHandler(f func(string)) {
 	warnHandler = f
 }
 
+// 触发事件的方法，外部使用要埋点的地方调用该方法
 func NewRecord(typ int, args ...interface{}) {
 	for _, item := range list {
 		if item.GetType() == typ {
@@ -62,6 +65,9 @@ func NewRecord(typ int, args ...interface{}) {
 }
 
 func init() {
+	// 超过阈值需要发起预警，设置预警接收方法
+	SetWarnHandler(prewarn.NewWarn)
+
 	go func() {
 		ticker := time.NewTicker(time.Second)
 		defer func() {
