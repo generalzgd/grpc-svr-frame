@@ -22,7 +22,7 @@ import (
 	`github.com/generalzgd/grpc-svr-frame/monitor`
 )
 
-func NewAnalyse(threshold, analyseNum uint, analyseType, fieldName string) *Analyse {
+func NewAnalyse(threshold, analyseNum uint, analyseType, fieldName string, parseFunc func(string) int) *Analyse {
 	if threshold < 1 || analyseNum < 1 || !monitor.ValidateAnalyseType(analyseType) || len(fieldName) < 1 {
 		return nil
 	}
@@ -31,6 +31,7 @@ func NewAnalyse(threshold, analyseNum uint, analyseType, fieldName string) *Anal
 		analyseType: analyseType,
 		analyseNum:  int(analyseNum),
 		fieldName:   fieldName,
+		parseFunc:   parseFunc,
 		inFlow:      make(chan string, 1000),
 	}
 	go p.run()
@@ -38,11 +39,13 @@ func NewAnalyse(threshold, analyseNum uint, analyseType, fieldName string) *Anal
 }
 
 // json分析统计，需要手动注册。如果有多个分析，请注册多次
+// 如果要解析其他数据流，请使用parseFunc字段
 type Analyse struct {
 	threshold   int
 	analyseNum  int    // 分析师数量
 	analyseType string // 要分析的类型
 	fieldName   string // 要分析的字段名
+	parseFunc   func(string) int
 	inFlow      chan string
 	// processFlow chan int // 统计数据流水线
 	analyseStore int64 // 其他类型要累积数值
@@ -68,15 +71,21 @@ func (p *Analyse) run() {
 
 // 解析出对应的字段值
 func (p *Analyse) analyseData(data string) {
+	num := 0
+	if p.parseFunc != nil {
+		num = p.parseFunc(p.fieldName)
+	} else {
+		res := pickjson.PickBytes([]byte(data), []byte(p.fieldName))
+		if res == nil {
+			return
+		}
+		if v, err := strconv.Atoi(string(res)); err != nil {
+			return
+		} else {
+			num = v
+		}
+	}
 
-	res := pickjson.PickBytes([]byte(data), []byte(p.fieldName))
-	if res == nil {
-		return
-	}
-	num, err := strconv.Atoi(string(res))
-	if err != nil {
-		return
-	}
 	if p.analyseType == monitor.ANALYSE_AVG {
 		p.lock.Lock()
 		atomic.AddInt64(&p.analyseStore, int64(num))
