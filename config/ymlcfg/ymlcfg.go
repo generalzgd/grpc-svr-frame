@@ -11,6 +11,18 @@
 
 package ymlcfg
 
+import (
+	`time`
+)
+
+// grpc链接池配置
+type ConnPool struct {
+	InitNum int           `yaml:"init"`    // 初始数量
+	CapNum  int           `yaml:"cap"`     // 最对连接数
+	Timeout time.Duration `yaml:"timeout"` // 空闲超时
+	LifeDur time.Duration `yaml:"livedur"` // 最大生命周期
+}
+
 type MemPoolConfig struct {
 	Type     string `yaml:"type"`
 	Factor   int    `yaml:"factor"`
@@ -32,6 +44,7 @@ type EndpointConfig struct {
 	Port      int        `yaml:"port"`    // 服务端用该字段
 	Secure    bool       `yaml:"secure"`
 	CertFiles []CertFile `yaml:"certfiles"`
+	Pool      ConnPool   `yaml:"pool"` // 链接池配置
 }
 
 type CertFile struct {
