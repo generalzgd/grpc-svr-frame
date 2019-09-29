@@ -23,6 +23,7 @@ func TestNewAnalyse(t *testing.T) {
 		analyseNum  uint
 		analyseType string
 		fieldName   string
+		parseFunc ParseFunc
 	}
 	tests := []struct {
 		name string
@@ -38,7 +39,7 @@ func TestNewAnalyse(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewAnalyse(tt.args.threshold, tt.args.analyseNum, tt.args.analyseType, tt.args.fieldName); !reflect.DeepEqual(got, tt.want) {
+			if got := NewAnalyse(tt.args.threshold, tt.args.analyseNum, tt.args.analyseType, tt.args.fieldName, tt.args.parseFunc); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewAnalyse() = %v, want %v", got, tt.want)
 			}
 		})
@@ -61,7 +62,9 @@ func TestAnalyse_analyseData(t *testing.T) {
 			},
 		},
 	}
-	p := NewAnalyse(1, 1, monitor.ANALYSE_CNT, "boo")
+	p := NewAnalyse(1, 1, monitor.ANALYSE_CNT, "boo", func(i2 interface{}, s string) (i int, e error) {
+		return 0, nil
+	})
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p.analyseData(tt.args.data)

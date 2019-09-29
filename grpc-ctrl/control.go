@@ -231,7 +231,7 @@ func (p *GrpcController) GetGrpcConnWithLB(cfg ymlcfg.EndpointConfig, ctx contex
 		return conn, err
 	}
 
-	pool, err := grpcpool.New(factory, 1, 20, 0, 0)
+	pool, err := grpcpool.New(factory, cfg.Pool.InitNum, cfg.Pool.CapNum, cfg.Pool.Timeout, cfg.Pool.LifeDur)
 	if err != nil {
 		return nil, err
 	}

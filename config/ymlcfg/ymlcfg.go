@@ -17,10 +17,24 @@ import (
 
 // grpc链接池配置
 type ConnPool struct {
-	InitNum int           `yaml:"init"`    // 初始数量
-	CapNum  int           `yaml:"cap"`     // 最对连接数
-	Timeout time.Duration `yaml:"timeout"` // 空闲超时
-	LifeDur time.Duration `yaml:"livedur"` // 最大生命周期
+	InitNum     int           `yaml:"init"`        // 初始数量
+	CapNum      int           `yaml:"cap"`         // 最对连接数
+	IdleTimeout time.Duration `yaml:"idletimeout"` // 空闲超时
+	LifeDur     time.Duration `yaml:"livedur"`     // 最大生命周期
+}
+
+func (p *ConnPool) GetInitNum() int {
+	if p.InitNum < 1 {
+		return 1
+	}
+	return p.InitNum
+}
+
+func (p *ConnPool) GetCapNum() int {
+	if p.CapNum < 1 {
+		return 10
+	}
+	return p.CapNum
 }
 
 type MemPoolConfig struct {
