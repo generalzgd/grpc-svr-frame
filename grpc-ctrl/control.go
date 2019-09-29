@@ -31,6 +31,7 @@ import (
 	`google.golang.org/grpc/peer`
 
 	libs `github.com/generalzgd/comm-libs`
+
 	`github.com/generalzgd/grpc-svr-frame/common`
 	`github.com/generalzgd/grpc-svr-frame/config/ymlcfg`
 )
@@ -231,7 +232,7 @@ func (p *GrpcController) GetGrpcConnWithLB(cfg ymlcfg.EndpointConfig, ctx contex
 		return conn, err
 	}
 
-	pool, err := grpcpool.New(factory, cfg.Pool.InitNum, cfg.Pool.CapNum, cfg.Pool.Timeout, cfg.Pool.LifeDur)
+	pool, err := grpcpool.New(factory, cfg.Pool.InitNum, cfg.Pool.CapNum, cfg.Pool.IdleTimeout, cfg.Pool.LifeDur)
 	if err != nil {
 		return nil, err
 	}
