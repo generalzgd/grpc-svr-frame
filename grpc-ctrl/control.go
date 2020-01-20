@@ -22,7 +22,9 @@ import (
 	`time`
 
 	`github.com/astaxie/beego/logs`
+	libs `github.com/generalzgd/comm-libs`
 	`github.com/generalzgd/deepcopy/dcopy`
+	`github.com/generalzgd/svr-config/ymlcfg`
 	grpcpool `github.com/processout/grpc-go-pool`
 	"google.golang.org/grpc"
 	`google.golang.org/grpc/balancer/roundrobin`
@@ -30,10 +32,7 @@ import (
 	`google.golang.org/grpc/metadata`
 	`google.golang.org/grpc/peer`
 
-	libs `github.com/generalzgd/comm-libs`
-
 	`github.com/generalzgd/grpc-svr-frame/common`
-	`github.com/generalzgd/grpc-svr-frame/config/ymlcfg`
 )
 
 type GrpcController struct {
