@@ -200,7 +200,7 @@ func (p *GrpcController) GetGrpcConn(key, addr string, cfg ymlcfg.EndpointConfig
 		return conn, err
 	}
 
-	pool, err := grpcpool.New(factory, 1, 10, 0, 0)
+	pool, err := grpcpool.New(factory, cfg.Pool.InitNum, cfg.Pool.CapNum, cfg.Pool.IdleTimeout, cfg.Pool.LifeDur)
 	if err != nil {
 		return nil, err
 	}
