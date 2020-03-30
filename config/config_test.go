@@ -11,9 +11,16 @@
 
 package config
 
-import "testing"
+import (
+	`os`
+	`path/filepath`
+	`testing`
+)
 
 func TestGatewayConfig_Load(t *testing.T) {
+	path, _ := os.Getwd()
+	path = filepath.Join(path, "config_dev.yaml")
+
 	type args struct {
 		path string
 	}
@@ -24,9 +31,9 @@ func TestGatewayConfig_Load(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			name:"t1",
-			args:args{
-				path:"/Users/zgd/WorkSpace/GoSpaceMod/grpc-svr-frame",
+			name: "t1",
+			args: args{
+				path: path,
 			},
 		},
 	}

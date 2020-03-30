@@ -24,10 +24,11 @@ func TestValidateGatewayType(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			name:"t1",
-			args:args{
-				in:GW_TYPE_HTTP,
+			name: "t1",
+			args: args{
+				in: GW_TYPE_HTTP,
 			},
+			want: true,
 		},
 	}
 	for _, tt := range tests {
@@ -50,8 +51,9 @@ func TestValidateLbPolicyType(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			name:"t1",
-			args:args{LB_POLICY_LOW_FIRST},
+			name: "t1",
+			args: args{LB_POLICY_LOW_FIRST},
+			want: true,
 		},
 	}
 	for _, tt := range tests {
@@ -74,8 +76,9 @@ func TestValidateStasticsType(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			name:"t1",
-			args:args{STI_TYPE_TPS},
+			name: "t1",
+			args: args{STI_TYPE_TPS},
+			want: true,
 		},
 	}
 	for _, tt := range tests {

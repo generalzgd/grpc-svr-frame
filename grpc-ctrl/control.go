@@ -22,12 +22,11 @@ import (
 	`time`
 
 	`github.com/astaxie/beego/logs`
+	gp `github.com/flyaways/pool`
 	libs `github.com/generalzgd/comm-libs`
 	`github.com/generalzgd/deepcopy/dcopy`
 	`github.com/generalzgd/svr-config/ymlcfg`
-	grpcpool `github.com/processout/grpc-go-pool`
 	"google.golang.org/grpc"
-	`google.golang.org/grpc/balancer/roundrobin`
 	"google.golang.org/grpc/credentials"
 	`google.golang.org/grpc/metadata`
 	`google.golang.org/grpc/peer`
@@ -37,12 +36,12 @@ import (
 
 type GrpcController struct {
 	connLock    sync.Mutex
-	grpcConnMap map[string]*grpcpool.Pool
+	grpcConnMap map[string]*gp.GRPCPool
 }
 
 func MakeGrpcController() GrpcController {
 	return GrpcController{
-		grpcConnMap: map[string]*grpcpool.Pool{},
+		grpcConnMap: map[string]*gp.GRPCPool{},
 	}
 }
 
@@ -177,18 +176,25 @@ func (p *GrpcController) GetTlsConfig(certfiles ...ymlcfg.CertFile) (*tls.Config
 }
 
 // 单纯获取客户端链接
-func (p *GrpcController) GetGrpcConn(key, addr string, cfg ymlcfg.EndpointConfig, ctx context.Context) (*grpcpool.ClientConn, error) {
+func (p *GrpcController) GetGrpcConn(key, addr string, cfg ymlcfg.EndpointConfig, ctx context.Context) (*grpc.ClientConn, func(), error) {
 	p.connLock.Lock()
 	defer p.connLock.Unlock()
 
 	// 服务名
 	if pool, ok := p.grpcConnMap[key]; ok {
-		if pool.Capacity() > 0 {
-			return pool.Get(ctx)
+		conn, err := pool.Get()
+		if err != nil {
+			return nil, nil, err
 		}
+		return conn, func() {
+			pool.Put(conn)
+		}, nil
+		// if pool.Capacity() > 0 {
+		// 	return pool.Get(ctx)
+		// }
 	}
 
-	factory := func() (*grpc.ClientConn, error) {
+	/*factory := func() (*grpc.ClientConn, error) {
 		ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 		opts := p.GetDialOption(cfg)
 
@@ -197,29 +203,49 @@ func (p *GrpcController) GetGrpcConn(key, addr string, cfg ymlcfg.EndpointConfig
 			logs.Error("dial conn in pool. addr:%v err:%v", addr, err)
 		}
 		return conn, err
+	}*/
+
+	options := &gp.Options{
+		InitTargets:  []string{addr},
+		InitCap:      1,
+		MaxCap:       10,
+		DialTimeout:  time.Second * 5,
+		IdleTimeout:  time.Second * 60,
+		ReadTimeout:  time.Second * 5,
+		WriteTimeout: time.Second * 5,
 	}
 
-	pool, err := grpcpool.New(factory, cfg.Pool.InitNum, cfg.Pool.CapNum, cfg.Pool.IdleTimeout, cfg.Pool.LifeDur)
+	pool, err := gp.NewGRPCPool(options, p.GetDialOption(cfg)...) // , cfg.Pool.InitNum, cfg.Pool.CapNum, cfg.Pool.IdleTimeout, cfg.Pool.LifeDur)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	p.grpcConnMap[key] = pool
-	return pool.Get(ctx)
+	conn, err := pool.Get()
+	if err != nil {
+		return nil, nil, err
+	}
+	return conn, func() {
+		pool.Put(conn)
+	}, nil
 }
 
 // 获取rpc客户端链接，包含round-robin策略
-func (p *GrpcController) GetGrpcConnWithLB(cfg ymlcfg.EndpointConfig, ctx context.Context) (*grpcpool.ClientConn, error) {
+func (p *GrpcController) GetGrpcConnWithLB(cfg ymlcfg.EndpointConfig, ctx context.Context) (*grpc.ClientConn, func(), error) {
 	p.connLock.Lock()
 	defer p.connLock.Unlock()
 
 	// 服务名
 	if pool, ok := p.grpcConnMap[cfg.Name]; ok {
-		if pool.Capacity() > 0 {
-			return pool.Get(ctx)
+		conn, err := pool.Get()
+		if err != nil {
+			return nil, nil, err
 		}
+		return conn, func() {
+			pool.Put(conn)
+		}, nil
 	}
 
-	factory := func() (*grpc.ClientConn, error) {
+	/*factory := func() (*grpc.ClientConn, error) {
 		ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 		opts := p.GetDialOption(cfg)
 		opts = append(opts, grpc.WithBlock(), grpc.WithBalancerName(roundrobin.Name))
@@ -229,17 +255,33 @@ func (p *GrpcController) GetGrpcConnWithLB(cfg ymlcfg.EndpointConfig, ctx contex
 			logs.Error("dial conn in pool. addr:%v err:%v", cfg.Address, err)
 		}
 		return conn, err
+	}*/
+
+	options := &gp.Options{
+		InitTargets:  []string{cfg.Address},
+		InitCap:      1,
+		MaxCap:       10,
+		DialTimeout:  time.Second * 5,
+		IdleTimeout:  time.Second * 60,
+		ReadTimeout:  time.Second * 5,
+		WriteTimeout: time.Second * 5,
 	}
 
-	pool, err := grpcpool.New(factory, cfg.Pool.InitNum, cfg.Pool.CapNum, cfg.Pool.IdleTimeout, cfg.Pool.LifeDur)
+	pool, err := gp.NewGRPCPool(options, p.GetDialOption(cfg)...) // , cfg.Pool.InitNum, cfg.Pool.CapNum, cfg.Pool.IdleTimeout, cfg.Pool.LifeDur)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	p.grpcConnMap[cfg.Name] = pool
-	return pool.Get(ctx)
+	conn, err := pool.Get()
+	if err != nil {
+		return nil, nil, err
+	}
+	return conn, func() {
+		pool.Put(conn)
+	}, nil
 }
 
-func (p *GrpcController) GetGrpcConnWithLBValues(ctx context.Context, name string, address string, port int, secure bool, cert string, priv string, rootCaFile string) (*grpcpool.ClientConn, error) {
+func (p *GrpcController) GetGrpcConnWithLBValues(ctx context.Context, name string, address string, port int, secure bool, cert string, priv string, rootCaFile string) (*grpc.ClientConn, func(), error) {
 	cfg := ymlcfg.EndpointConfig{
 		Name:    name,
 		Address: address,
@@ -272,5 +314,5 @@ func (p *GrpcController) DisposeGrpcConn(svrnameOrKey string) {
 	for _, pool := range p.grpcConnMap {
 		pool.Close()
 	}
-	p.grpcConnMap = map[string]*grpcpool.Pool{}
+	p.grpcConnMap = map[string]*gp.GRPCPool{}
 }

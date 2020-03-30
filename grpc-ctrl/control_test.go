@@ -14,7 +14,7 @@ import (
 	"reflect"
 	"testing"
 
-	`google.golang.org/grpc`
+	gp `github.com/flyaways/pool`
 )
 
 func TestMakeGrpcController(t *testing.T) {
@@ -25,7 +25,7 @@ func TestMakeGrpcController(t *testing.T) {
 		// TODO: Add test cases.
 		{
 			name:"make controller",
-			want:GrpcController{grpcConnMap: map[string]*grpc.ClientConn{}},
+			want:GrpcController{grpcConnMap: map[string]*gp.GRPCPool{}},
 		},
 	}
 	for _, tt := range tests {

@@ -12,7 +12,6 @@ package grpc_consul
 
 import (
 	"testing"
-	"time"
 )
 
 func TestInitRegister(t *testing.T) {
@@ -37,7 +36,7 @@ func TestInitRegister(t *testing.T) {
 		})
 	}
 
-	time.Sleep(time.Hour)
+	// time.Sleep(time.Hour)
 }
 
 func Test_testCallRpc(t *testing.T) {

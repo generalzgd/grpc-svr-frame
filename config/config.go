@@ -106,11 +106,11 @@ type GatewayConfig struct {
 
 func (p *GatewayConfig) Load(path string) error {
 	if len(path) < 1 {
-		path = filepath.Dir(os.Args[0])
+		path = filepath.Join(filepath.Dir(os.Args[0]), "config", fmt.Sprintf("config_%s.yaml", "dev"))
 	}
-	file := filepath.Join(path, "config", fmt.Sprintf("config_%s.yaml", "dev"))
+	// file := filepath.Join(path, "config", fmt.Sprintf("config_%s.yaml", "dev"))
 
-	f, err := os.Open(file)
+	f, err := os.Open(path)
 	if err != nil {
 		return err
 	}
