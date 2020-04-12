@@ -49,16 +49,11 @@ github.com/fatih/color v1.7.0/go.mod h1:Zm6kSWBoL9eyXnKyktHP6abPY2pDugNf5Kwzbycv
 github.com/flyaways/pool v1.0.1 h1:eTVspiMZvxmCA982Jl3R+v1i+YdgSrPMkGeVLJcG6bM=
 github.com/flyaways/pool v1.0.1/go.mod h1:Xb+DhmXeUgcY5a6me9oFcm7MNVAu/KBzoJ7dqgVLXYw=
 github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=
-github.com/funny/link v0.0.0-20190321084249-bd07e4e9e63f h1:ODYhwwiryTbyJ0Zz5ox99Ou4RX09ZuFYHJ7I2Jgk9bo=
-github.com/funny/link v0.0.0-20190321084249-bd07e4e9e63f/go.mod h1:ajJ48jAHusPjnL6cGCP4+f2JoOjBUttNeVas4w9NXtc=
-github.com/funny/slab v0.0.0-20180511031532-b1fad5e5d478 h1:Db9StoJ6RZN3YttC0Pm0I4Y5izITRYch3RMbT59BYN0=
-github.com/funny/slab v0.0.0-20180511031532-b1fad5e5d478/go.mod h1:0j1+svBH8ABEIPdUP0AIg4qedsybnXGJBakCEw8cfoo=
-github.com/funny/utest v0.0.0-20161029064919-43870a374500 h1:Z0r1CZnoIWFB/Uiwh1BU5FYmuFe6L5NPi6XWQEmsTRg=
-github.com/funny/utest v0.0.0-20161029064919-43870a374500/go.mod h1:mUn39tBov9jKnTWV1RlOYoNzxdBFHiSzXWdY1FoNGGg=
+github.com/generalzgd/comm-libs v0.0.0-20190923062620-a884e5520268/go.mod h1:fMLe7uEZS9mK/LN4wYsxKp5aaYRlzUsfl5Ro+jTsoQA=
 github.com/generalzgd/comm-libs v0.0.0-20190926105101-faf86c3df881 h1:ePjxxdMhajb9QM6ZMjYmODl/tXrAQ3foqNx9OP7Heek=
 github.com/generalzgd/comm-libs v0.0.0-20190926105101-faf86c3df881/go.mod h1:fMLe7uEZS9mK/LN4wYsxKp5aaYRlzUsfl5Ro+jTsoQA=
-github.com/generalzgd/deepcopy v0.0.0-20190822053003-05164161aa67 h1:5sogrf8JchduRinBCGyQqhz82y2x+dXfrUz/xjAqvck=
-github.com/generalzgd/deepcopy v0.0.0-20190822053003-05164161aa67/go.mod h1:60T09WX81PKkeXKchJZVUg5F/AiwBCMrsPFnrBdep4s=
+github.com/generalzgd/deepcopy v0.0.0-20200412030653-dddc3fe863a1 h1:sC82sylFthft3F5mzkl+1CtLkCBxgVRNgpv3J07WLAg=
+github.com/generalzgd/deepcopy v0.0.0-20200412030653-dddc3fe863a1/go.mod h1:MQSrssLOq3OL/MnSHDZICdJ71B1huigqQwF1vzXSb28=
 github.com/generalzgd/svr-config v0.0.0-20200120025510-828d005b034f h1:1akqpZWpA+ND6ahO3+HtDA/4IZfr01Dj60vN985T1gM=
 github.com/generalzgd/svr-config v0.0.0-20200120025510-828d005b034f/go.mod h1:CvY9PQhq6Z2Q5f8IgGRnwtTHtLlUmQa6MWtCnQN/hmw=
 github.com/go-kit/kit v0.8.0/go.mod h1:xBxKIO96dXMWWy0MnWVtmwkA9/13aqxPnvrjFYMA2as=
@@ -112,8 +107,6 @@ github.com/googleapis/google-api-go-client v0.3.1/go.mod h1:6wY9I6uQWHQ8EM57III9
 github.com/googleapis/google-cloud-go v0.37.4/go.mod h1:NHPJ89PdicEuT9hdPXMROBD91xc5uRDxsMtSB16k7hw=
 github.com/gorilla/context v1.1.1/go.mod h1:kBGZzfjB9CEq2AlWe17Uuf7NDRt0dE0s8S51q0aT7Yg=
 github.com/gorilla/mux v1.6.2/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
-github.com/gorilla/websocket v1.4.0 h1:WDFjx/TMzVgy9VdMMQi2K2Emtwi2QcUQsztZ/zLaH/Q=
-github.com/gorilla/websocket v1.4.0/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoAMk2YaljkQ=
 github.com/grpc/grpc-go v1.24.0 h1:OX5G7323Oeej0EntQk5xafq5aFjjvan4iVcfpm2Hj+8=
 github.com/grpc/grpc-go v1.24.0/go.mod h1:XDChyiUovWa60DnaeDeZmSW86xtLtjtZbwvSiRnRtcA=
 github.com/hashicorp/consul/api v1.2.0 h1:oPsuzLp2uk7I7rojPKuncWbZ+m5TMoD4Ivs+2Rkeh4Y=
@@ -189,8 +182,6 @@ github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINE
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/posener/complete v1.1.1/go.mod h1:em0nMJCgc9GFtwrmVmEMR/ZL6WyhyjMBndrE9hABlRI=
-github.com/processout/grpc-go-pool v1.2.1 h1:hbp1BOA02CIxEAoRLHGpUhhPFv77nwfBLBeO3Ya9P7I=
-github.com/processout/grpc-go-pool v1.2.1/go.mod h1:F4hiNj96O6VQ87jv4rdz8R9tkHdelQQJ/J2B1a5VSt4=
 github.com/prometheus/client_golang v0.9.1/go.mod h1:7SWBe2y4D6OKWSNQJUaRYU/AaXPKyh/dDVn+NZz0KFw=
 github.com/prometheus/client_golang v0.9.3-0.20190127221311-3c4408c8b829/go.mod h1:p2iRAGwDERtqlqzRXnrOVns+ignqQo//hLXqYxZYVNs=
 github.com/prometheus/client_model v0.0.0-20180712105110-5c3871d89910/go.mod h1:MbSGuTsp3dbXC40dX6PRTWyKYBIrTGTE9sqQNg2J8bo=

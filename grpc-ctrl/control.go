@@ -66,13 +66,11 @@ func (p *GrpcController) GetClientInfo(ctx context.Context) (*common.ClientConnI
 
 // make out going context by metadata
 func (p *GrpcController) MakeOutgoingContext(ctx context.Context, md metadata.MD) context.Context {
-	// ctx, _ = context.WithTimeout(ctx, 15*time.Second)
 	ctx = metadata.NewOutgoingContext(ctx, md)
 	return ctx
 }
 
 func (p *GrpcController) MakeIncomingContext(ctx context.Context, md metadata.MD) context.Context {
-	// ctx,_=context.WithTimeout(ctx,15*time.Second)
 	ctx = metadata.NewIncomingContext(ctx, md)
 	return ctx
 }
@@ -155,16 +153,16 @@ func (p *GrpcController) GetDialOption(cfg ymlcfg.EndpointConfig) []grpc.DialOpt
 	return opts
 }
 
-func (p *GrpcController) GetTlsConfig(certfiles ...ymlcfg.CertFile) (*tls.Config, error) {
-	if len(certfiles) < 1 {
+func (p *GrpcController) GetTlsConfig(certFiles ...ymlcfg.CertFile) (*tls.Config, error) {
+	if len(certFiles) < 1 {
 		return nil, errors.New("cert file empty")
 	}
 	tlsCfg := &tls.Config{}
 	tlsCfg.MaxVersion = tls.VersionTLS10
-	tlsCfg.Certificates = make([]tls.Certificate, len(certfiles))
+	tlsCfg.Certificates = make([]tls.Certificate, len(certFiles))
 	dir := filepath.Dir(os.Args[0])
 	var err error
-	for i, certFile := range certfiles {
+	for i, certFile := range certFiles {
 		certFilePath := filepath.Join(dir, "certs", certFile.Cert)
 		privFilePath := filepath.Join(dir, "certs", certFile.Priv)
 		if tlsCfg.Certificates[i], err = tls.LoadX509KeyPair(certFilePath, privFilePath); err != nil {
@@ -176,7 +174,7 @@ func (p *GrpcController) GetTlsConfig(certfiles ...ymlcfg.CertFile) (*tls.Config
 }
 
 // 单纯获取客户端链接
-func (p *GrpcController) GetGrpcConn(key, addr string, cfg ymlcfg.EndpointConfig, ctx context.Context) (*grpc.ClientConn, func(), error) {
+func (p *GrpcController) GetGrpcConn(key, addr string, cfg ymlcfg.EndpointConfig) (*grpc.ClientConn, func(), error) {
 	p.connLock.Lock()
 	defer p.connLock.Unlock()
 
@@ -189,21 +187,7 @@ func (p *GrpcController) GetGrpcConn(key, addr string, cfg ymlcfg.EndpointConfig
 		return conn, func() {
 			pool.Put(conn)
 		}, nil
-		// if pool.Capacity() > 0 {
-		// 	return pool.Get(ctx)
-		// }
 	}
-
-	/*factory := func() (*grpc.ClientConn, error) {
-		ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
-		opts := p.GetDialOption(cfg)
-
-		conn, err := grpc.DialContext(ctx, addr, opts...)
-		if err != nil {
-			logs.Error("dial conn in pool. addr:%v err:%v", addr, err)
-		}
-		return conn, err
-	}*/
 
 	options := &gp.Options{
 		InitTargets:  []string{addr},
@@ -220,17 +204,17 @@ func (p *GrpcController) GetGrpcConn(key, addr string, cfg ymlcfg.EndpointConfig
 		return nil, nil, err
 	}
 	p.grpcConnMap[key] = pool
-	conn, err := pool.Get()
-	if err != nil {
+	if conn, err := pool.Get(); err != nil {
 		return nil, nil, err
+	} else {
+		return conn, func() {
+			pool.Put(conn)
+		}, nil
 	}
-	return conn, func() {
-		pool.Put(conn)
-	}, nil
 }
 
 // 获取rpc客户端链接，包含round-robin策略
-func (p *GrpcController) GetGrpcConnWithLB(cfg ymlcfg.EndpointConfig, ctx context.Context) (*grpc.ClientConn, func(), error) {
+func (p *GrpcController) GetGrpcConnWithLB(cfg ymlcfg.EndpointConfig) (*grpc.ClientConn, func(), error) {
 	p.connLock.Lock()
 	defer p.connLock.Unlock()
 
@@ -244,18 +228,6 @@ func (p *GrpcController) GetGrpcConnWithLB(cfg ymlcfg.EndpointConfig, ctx contex
 			pool.Put(conn)
 		}, nil
 	}
-
-	/*factory := func() (*grpc.ClientConn, error) {
-		ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
-		opts := p.GetDialOption(cfg)
-		opts = append(opts, grpc.WithBlock(), grpc.WithBalancerName(roundrobin.Name))
-
-		conn, err := grpc.DialContext(ctx, cfg.Address, opts...)
-		if err != nil {
-			logs.Error("dial conn in pool. addr:%v err:%v", cfg.Address, err)
-		}
-		return conn, err
-	}*/
 
 	options := &gp.Options{
 		InitTargets:  []string{cfg.Address},
@@ -272,16 +244,16 @@ func (p *GrpcController) GetGrpcConnWithLB(cfg ymlcfg.EndpointConfig, ctx contex
 		return nil, nil, err
 	}
 	p.grpcConnMap[cfg.Name] = pool
-	conn, err := pool.Get()
-	if err != nil {
+	if conn, err := pool.Get();err != nil {
 		return nil, nil, err
+	} else {
+		return conn, func() {
+			pool.Put(conn)
+		}, nil
 	}
-	return conn, func() {
-		pool.Put(conn)
-	}, nil
 }
 
-func (p *GrpcController) GetGrpcConnWithLBValues(ctx context.Context, name string, address string, port int, secure bool, cert string, priv string, rootCaFile string) (*grpc.ClientConn, func(), error) {
+func (p *GrpcController) GetGrpcConnWithLBValues(name string, address string, port int, secure bool, cert string, priv string, rootCaFile string) (*grpc.ClientConn, func(), error) {
 	cfg := ymlcfg.EndpointConfig{
 		Name:    name,
 		Address: address,
@@ -296,7 +268,7 @@ func (p *GrpcController) GetGrpcConnWithLBValues(ctx context.Context, name strin
 		},
 	}
 
-	return p.GetGrpcConnWithLB(cfg, ctx)
+	return p.GetGrpcConnWithLB(cfg)
 }
 
 // 销毁所有链接, 或指定销毁

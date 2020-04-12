@@ -10,14 +10,10 @@ require (
 	github.com/facebookgo/stack v0.0.0-20160209184415-751773369052 // indirect
 	github.com/facebookgo/subset v0.0.0-20150612182917-8dac2c3c4870 // indirect
 	github.com/flyaways/pool v1.0.1
-	github.com/funny/link v0.0.0-20190321084249-bd07e4e9e63f
-	github.com/funny/slab v0.0.0-20180511031532-b1fad5e5d478
-	github.com/funny/utest v0.0.0-20161029064919-43870a374500 // indirect
 	github.com/generalzgd/comm-libs v0.0.0-20190926105101-faf86c3df881
-	github.com/generalzgd/deepcopy v0.0.0-20190822053003-05164161aa67
+	github.com/generalzgd/deepcopy v0.0.0-20200412030653-dddc3fe863a1
 	github.com/generalzgd/svr-config v0.0.0-20200120025510-828d005b034f
 	github.com/golang/protobuf v1.3.2
-	github.com/gorilla/websocket v1.4.0
 	github.com/hashicorp/consul/api v1.2.0
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644 // indirect
