@@ -14,14 +14,12 @@ require (
 	github.com/generalzgd/deepcopy v0.0.0-20200412030653-dddc3fe863a1
 	github.com/generalzgd/svr-config v0.0.0-20200120025510-828d005b034f
 	github.com/golang/protobuf v1.3.2
-	github.com/hashicorp/consul/api v1.2.0
-	github.com/kr/pretty v0.1.0 // indirect
+	github.com/hashicorp/consul/api v1.4.0
 	github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644 // indirect
 	github.com/toolkits/slice v0.0.0-20141116085117-e44a80af2484
 	google.golang.org/genproto v0.0.0-20190516172635-bb713bdc0e52 // indirect
 	google.golang.org/grpc v1.21.0
-	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
-	gopkg.in/yaml.v2 v2.2.7
+	gopkg.in/yaml.v2 v2.2.8
 )
 
 replace (
