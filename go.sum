@@ -56,6 +56,8 @@ github.com/generalzgd/comm-libs v0.0.0-20190926105101-faf86c3df881 h1:ePjxxdMhaj
 github.com/generalzgd/comm-libs v0.0.0-20190926105101-faf86c3df881/go.mod h1:fMLe7uEZS9mK/LN4wYsxKp5aaYRlzUsfl5Ro+jTsoQA=
 github.com/generalzgd/deepcopy v0.0.0-20200412030653-dddc3fe863a1 h1:sC82sylFthft3F5mzkl+1CtLkCBxgVRNgpv3J07WLAg=
 github.com/generalzgd/deepcopy v0.0.0-20200412030653-dddc3fe863a1/go.mod h1:MQSrssLOq3OL/MnSHDZICdJ71B1huigqQwF1vzXSb28=
+github.com/generalzgd/micro-conf v0.0.0-20200415171550-a6416c395396 h1:A+65KsBl21Z7/jkVXyJov5UldwqX254hBZeNZ/kR+CM=
+github.com/generalzgd/micro-conf v0.0.0-20200415171550-a6416c395396/go.mod h1:NSGmLlf78LVEgXTfZ0Kk/ySeQUYQF8JhcmJFdaA9S/8=
 github.com/generalzgd/svr-config v0.0.0-20200120025510-828d005b034f h1:1akqpZWpA+ND6ahO3+HtDA/4IZfr01Dj60vN985T1gM=
 github.com/generalzgd/svr-config v0.0.0-20200120025510-828d005b034f/go.mod h1:CvY9PQhq6Z2Q5f8IgGRnwtTHtLlUmQa6MWtCnQN/hmw=
 github.com/go-kit/kit v0.8.0/go.mod h1:xBxKIO96dXMWWy0MnWVtmwkA9/13aqxPnvrjFYMA2as=

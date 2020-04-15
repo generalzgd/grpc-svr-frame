@@ -19,29 +19,29 @@ import (
 )
 
 const (
-	LB_POLICY_RANDOM    = "random"   // 随机 http默认方式
-	LB_POLICY_HOLD      = "hold"     // 会话保持  长链接默认方式
-	LB_POLICY_PERCENT   = "percent"  // 指定比例
-	LB_POLICY_LOW_FIRST = "lowfirst" // 低负载优先
+	LbPolicyRandom   = "random"   // 随机 http默认方式
+	LbPolicyHold     = "hold"     // 会话保持  长链接默认方式
+	LbPolicyPercent  = "percent"  // 指定比例
+	LbPolicyLowFirst = "lowfirst" // 低负载优先
 )
 
 const (
-	GW_TYPE_HTTP = "http" // http1.1 http2(grpc直接支持，gateway则不再实现转发，loadbanch需要实现)
-	GW_TYPE_TCP  = "tcp"  // 长短连接
-	GW_TYPE_WS   = "ws"   // 长短连接
+	GwTypeHttp = "http" // http1.1 http2(grpc直接支持，gateway则不再实现转发，loadbanch需要实现)
+	GwTypeTcp  = "tcp"  // 长短连接
+	GwTypeWs   = "ws"   // 长短连接
 )
 
 const (
-	STI_TYPE_SUM   = "sum" // 统计类型枚举
-	STI_TYPE_AVG   = "avg"
-	STI_TYPE_COUNT = "count"
-	STI_TYPE_TPS   = "tps"
+	StiTypeSum   = "sum" // 统计类型枚举
+	StiTypeAvg   = "avg"
+	StiTypeCount = "count"
+	StiTypeTps   = "tps"
 )
 
 var (
-	GwTypeList   = []string{GW_TYPE_HTTP, GW_TYPE_TCP, GW_TYPE_WS}
-	LbPolicyList = []string{LB_POLICY_RANDOM, LB_POLICY_HOLD, LB_POLICY_PERCENT, LB_POLICY_LOW_FIRST}
-	StiTypeList  = []string{STI_TYPE_SUM, STI_TYPE_AVG, STI_TYPE_COUNT, STI_TYPE_TPS}
+	GwTypeList   = []string{GwTypeHttp, GwTypeTcp, GwTypeWs}
+	LbPolicyList = []string{LbPolicyRandom, LbPolicyHold, LbPolicyPercent, LbPolicyLowFirst}
+	StiTypeList  = []string{StiTypeSum, StiTypeAvg, StiTypeCount, StiTypeTps}
 )
 
 func ValidateGatewayType(in string) bool {
@@ -67,6 +67,11 @@ type ClientConnInfo struct {
 	GateIp    string `json:"gate_ip,omitempty"`
 	LoginTime int64  `json:"login_time,omitempty"` // 上次登录时间
 	Expire    int64  `json:"-"`                    // 过期时间 s，logintime + expire < now, expire==0 不过期
+	Guid string `json:"-"`
+	Uid uint32 `json:"uid"`
+	Platform uint32 `json:"platform"`
+	State bool `json:"state"`
+	Nickname string `json:"nickname"`
 }
 
 // 是否过期

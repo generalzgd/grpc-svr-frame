@@ -25,7 +25,8 @@ import (
 	gp `github.com/flyaways/pool`
 	libs `github.com/generalzgd/comm-libs`
 	`github.com/generalzgd/deepcopy/dcopy`
-	`github.com/generalzgd/svr-config/ymlcfg`
+	`github.com/generalzgd/micro-conf/ymlcfg`
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	`google.golang.org/grpc/metadata`

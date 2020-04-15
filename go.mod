@@ -12,7 +12,7 @@ require (
 	github.com/flyaways/pool v1.0.1
 	github.com/generalzgd/comm-libs v0.0.0-20190926105101-faf86c3df881
 	github.com/generalzgd/deepcopy v0.0.0-20200412030653-dddc3fe863a1
-	github.com/generalzgd/svr-config v0.0.0-20200120025510-828d005b034f
+	github.com/generalzgd/micro-conf v0.0.0-20200415171550-a6416c395396
 	github.com/golang/protobuf v1.3.2
 	github.com/hashicorp/consul/api v1.4.0
 	github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644 // indirect
