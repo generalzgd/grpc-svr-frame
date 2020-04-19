@@ -1,18 +1,17 @@
 module github.com/generalzgd/grpc-svr-frame
 
-go 1.12
+go 1.14
 
 require (
-	github.com/astaxie/beego v1.12.0
+	github.com/astaxie/beego v1.12.1
 	github.com/facebookgo/ensure v0.0.0-20160127193407-b4ab57deab51 // indirect
 	github.com/facebookgo/freeport v0.0.0-20150612182905-d4adf43b75b9 // indirect
 	github.com/facebookgo/grace v0.0.0-20180706040059-75cf19382434
 	github.com/facebookgo/stack v0.0.0-20160209184415-751773369052 // indirect
 	github.com/facebookgo/subset v0.0.0-20150612182917-8dac2c3c4870 // indirect
 	github.com/flyaways/pool v1.0.1
-	github.com/generalzgd/comm-libs v0.0.0-20190926105101-faf86c3df881
+	github.com/generalzgd/comm-libs v0.0.0-20200419072240-8400406771df
 	github.com/generalzgd/deepcopy v0.0.0-20200412030653-dddc3fe863a1
-	github.com/generalzgd/micro-conf v0.0.0-20200415171550-a6416c395396
 	github.com/golang/protobuf v1.3.2
 	github.com/hashicorp/consul/api v1.4.0
 	github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644 // indirect

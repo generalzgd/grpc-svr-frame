@@ -24,8 +24,8 @@ import (
 	`github.com/astaxie/beego/logs`
 	gp `github.com/flyaways/pool`
 	libs `github.com/generalzgd/comm-libs`
+	`github.com/generalzgd/comm-libs/conf/ymlcfg`
 	`github.com/generalzgd/deepcopy/dcopy`
-	`github.com/generalzgd/micro-conf/ymlcfg`
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
